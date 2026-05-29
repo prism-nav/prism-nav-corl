@@ -1,0 +1,72 @@
+theme: default # default || classic || dark
+organization: Anonymous University
+# twitter:
+title: 'PRISM-Nav: Parallel Reasoning In Specialized Multi-agents for Egocentric Social Navigation'
+journal: "CoRL'26"
+resources:
+  paper:
+  # arxiv:
+  # code:
+  # video:
+  # demo:
+  # huggingface:
+description: Zero-shot multi-agent VLM framework for egocentric social navigation
+
+image:
+url:
+speakerdeck: # speakerdeck slide ID
+authors:
+  - name: Anonymous Author(s)
+    # affiliation: [1]
+    # url:
+# affiliations:
+#   - Affiliation
+meta: []
+
+# bibtex: >
+#   @inproceedings{anonymous2026prismnav,
+#     author    = {Anonymous},
+#     title     = {PRISM-Nav: Parallel Reasoning In Specialized Multi-agents for Egocentric Social Navigation},
+#     booktitle = {Conference on Robot Learning},
+#     year      = {2026},
+#     note      = {Anonymous submission}
+#   }
+
+teaser: fig1_v3.jpg
+abstract: |
+  Robots operating in human-centric environments must interpret high-level instructions and comply with implicit social norms inferred from scene context alone, without task-specific training. Egocentric social navigation addresses this challenge by reasoning over goals, hazards, and social context from a single first-person RGB image. A single vision-language model(VLM) prompted to perform each of these navigation sub-tasks at once underperforms even on large VLMs, reflecting multi-task conflation and lost-in-the-middle degradation. We present PRISM-Nav, a zero-shot multi-agent framework that performs **P**arallel **R**easoning **I**n **S**pecialized **M**ulti-agents, communicating through visual prompting on the input image. The pipeline operates in two phases: (i)parallel scene understanding by three agents(goal, safety, and social reasoning), and (ii)trace generation with categorical self-correction. Evaluated on the NaviTrace benchmark across four embodiments and multiple VLMs, our framework consistently outperforms the NaviTrace monolithic baseline. Notably, decomposition recovers models that fail catastrophically under monolithic prompting, indicating that some failures are attributed to the network architecture rather than limited capacity. Real-robot deployment on wheeled platforms confirms the gains transfer to physical embodiments.
+
+body:
+  - title: PRISM-Nav Framework
+    text: |
+      <img src="fig2_framework_v3.jpg" alt="PRISM-Nav Framework" />
+
+      The PRISM-Nav framework takes a single egocentric RGB image, a high-level navigation task, and the robot embodiment as input. The example in the figure shows a wheeled robot receiving the task "Follow the path" from a first-person outdoor scene. The pipeline first performs scene understanding with specialized agents. A goal reasoning agent proposes and selects a navigation goal, a safety map agent identifies hazards and traversability constraints, and a social hints agent is conditionally invoked by a scene router when social structure is relevant. These outputs are combined into a constraint-marked image that preserves spatial grounding for the next stage. In the trace generation stage, a trace generator produces an initial path, a trace evaluator checks it, and a self-correction branch regenerates the trace when failures are detected. A pair selector then chooses the better trace. The final output is a JSON-style result containing the selected goal point and the ordered trace points over the image.
+
+  - title: Real-World Navigation Deployment
+    text: |
+      <div class="uk-child-width-1-1 uk-child-width-1-2@m uk-grid-small" uk-grid>
+        <div>
+          <video src="Ours_5.mp4" controls muted playsinline class="uk-width-1-1"></video>
+        </div>
+        <div>
+          <video src="Ours_6.mp4" controls muted playsinline class="uk-width-1-1"></video>
+        </div>
+      </div>
+
+      These videos show PRISM-Nav deployed on a wheeled robot in real-world outdoor scenes. From a high-level navigation command and the robot's egocentric camera view, the system infers a socially appropriate route and follows a feasible path while respecting scene structure such as walkable regions, entrances, and surrounding obstacles.
+
+      The deployment examples highlight the transfer of the zero-shot multi-agent reasoning pipeline from benchmark images to physical robot execution. The safety and social reasoning agents provide constraints for the trace generator, helping the robot choose paths that are both traversable and aligned with human-centric navigation norms.
+
+  - title: NaviTrace Benchmark Results
+    text: |
+      <img src="model_ablation.jpg" alt="Model Ablation" />
+
+      The NaviTrace benchmark results compare PRISM-Nav against monolithic baseline prompting across multiple VLM backbones and four embodiments: human, bicycle, legged robot, and wheeled robot. The mean score trend shows that PRISM-Nav consistently improves over the corresponding baseline across model scales and embodiment types.
+
+      The gain is especially clear for smaller models. While the monolithic Gemma E4B baseline fails catastrophically with negative scores, the PRISM-Nav decomposition recovers usable navigation behavior. Larger VLMs also benefit from the multi-agent design, suggesting that the bottleneck is not only model capacity but also the architecture of asking a single model call to solve goal reasoning, safety reasoning, social reasoning, and trace generation at once.
+
+  - title: License
+    text: |
+      This template is provided under the [Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)](https://creativecommons.org/licenses/by-sa/4.0/) license.
+      You are free to use and modify the code in your project as long as you include a link to this [GitHub repository](https://github.com/denkiwakame/academic-project-template) in your footer.
